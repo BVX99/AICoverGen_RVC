@@ -202,7 +202,7 @@ if __name__ == '__main__':
                     rms_mix_rate = gr.Slider(0, 1, value=0.25, label='RMS mix rate', info="Control how much to mimic the original vocal's loudness (0) or a fixed loudness (1)")
                     protect = gr.Slider(0, 0.5, value=0.33, label='Protect rate', info='Protect voiceless consonants and breath sounds. Set to 0.5 to disable.')
                     with gr.Column():
-                        f0_method = gr.Dropdown(['rmvpe', 'mangio-crepe'], value='rmvpe', label='Pitch detection algorithm', info='Best option is rmvpe (clarity in vocals), then mangio-crepe (smoother vocals)')
+                        f0_method = gr.Dropdown(['rmvpe', 'mangio-crepe', 'crepe-tiny', 'crepe', 'mangio-crepe-tiny'], value='rmvpe', label='Pitch detection algorithm', info='Change the Pitch Extraction Algorithm. Extraction methods are sorted from `worst quality` to 'best quality'. If you don't know what you're doing, leave rmvpe.')
                         crepe_hop_length = gr.Slider(32, 320, value=128, step=1, visible=False, label='Crepe hop length', info='Lower values leads to longer conversions and higher risk of voice cracks, but better pitch accuracy.')
                         f0_method.change(show_hop_slider, inputs=f0_method, outputs=crepe_hop_length)
                 keep_files = gr.Checkbox(label='Keep intermediate files', info='Keep all audio files generated in the song_output/id directory, e.g. Isolated Vocals/Instrumentals. Leave unchecked to save space')
@@ -228,7 +228,7 @@ if __name__ == '__main__':
                 clear_btn = gr.ClearButton(value='Clear', components=[song_input, rvc_model, keep_files, local_file])
                 generate_btn = gr.Button("Generate", variant='primary')
                 ai_cover = gr.Audio(label='AI Cover', show_share_button=False)
-
+            
             ref_btn.click(update_models_list, None, outputs=rvc_model)
             is_webui = gr.Number(value=1, visible=False)
             generate_btn.click(song_cover_pipeline,
@@ -260,7 +260,7 @@ if __name__ == '__main__':
                 gr.Examples(
                     [
                         ['https://huggingface.co/phant0m4r/LiSA/resolve/main/LiSA.zip', 'Lisa'],
-                        ['https://pixeldrain.com/u/3tJmABXA', 'Gura'],
+                        ['https://huggingface.co/Hev832/rvc/resolve/main/Sonic.zip?download=true', 'Sonic'],
                         ['https://huggingface.co/Kit-Lemonfoot/kitlemonfoot_rvc_models/resolve/main/AZKi%20(Hybrid).zip', 'Azki']
                     ],
                     [model_zip_link, model_name],
